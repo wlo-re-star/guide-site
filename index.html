@@ -1,0 +1,100 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Item Guide</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fff;--ink:#2a2418;--mut:#7a6d57;--gold:#a77d2c;--line:#e3dccb}
+@media(prefers-color-scheme:dark){:root{--bg:#1d1a14;--card:#27231b;--ink:#efe8d8;--mut:#a99d86;--gold:#d2a34a;--line:#3a3427}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,"Noto Sans Thai",Sarabun,sans-serif}
+header{padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line)}h1{margin:0;font-size:22px;color:var(--gold)}
+main{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:20px;max-width:1200px;margin:20px auto;padding:0 16px}
+@media(max-width:760px){main{grid-template-columns:1fr}}
+input,select{width:100%;padding:9px 12px;margin-bottom:8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
+.list{max-height:70vh;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+.list button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:6px 10px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:inherit;cursor:pointer}
+.list button:hover,.list button.on{background:color-mix(in srgb,var(--gold) 16%,transparent)}
+.list img,.card img{width:36px;height:36px;object-fit:contain}.card img{width:64px;height:64px}
+.list small{margin-left:auto;color:var(--mut);white-space:nowrap}
+.card{background:var(--card);border:2px solid var(--gold);border-radius:6px;padding:20px}.head{display:flex;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+h2{margin:0;font-size:24px}.mut{color:var(--mut);font-size:14px}dl{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin:0}dt{color:var(--mut);font-size:14px}dd{margin:0;font-weight:600}
+.desc{margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);font-style:italic;color:var(--mut)}.set a{display:inline-block;margin:2px 8px 2px 0;color:var(--gold);cursor:pointer}
+[hidden]{display:none!important}header{display:flex;align-items:center;gap:16px;flex-wrap:wrap}#nav button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:3px 14px;margin-right:6px;font:inherit;cursor:pointer}#nav button.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--card)}.wrap table{border-collapse:collapse;width:100%;min-width:700px}.wrap th,.wrap td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.wrap th{font-size:14px;color:var(--mut)}
+.chip{display:flex;align-items:center;gap:6px;margin:2px 0;cursor:pointer}.chip img,.chip .ph{width:32px;height:32px;object-fit:contain;flex:none}.ok{color:#2f7d4f;font-weight:700}.tr{color:#b5651d;font-weight:700}#rv h2{font-size:20px;margin:24px 0 8px;border-bottom:2px solid var(--line);padding-bottom:6px}
+.rw{max-width:1100px;margin:0 auto;padding:12px 16px 40px}.ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}.ctl input{width:240px;margin:0}
+.ctl button,.tr-box button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:3px 14px;font:inherit;cursor:pointer}.ctl button.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+.bk{display:inline-block;border-radius:6px;padding:0 10px;font-size:13px;font-weight:700;color:#fff;background:var(--mut)}.b2{background:#c79a2a}.b3{background:#c0392b}.b4{background:#2f6fb5}
+.jp{font-weight:700;text-align:center}.rcp{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}.pl{color:var(--mut);font-weight:700}
+.chip{display:inline-flex;align-items:center;gap:6px;margin:2px 0;cursor:pointer}.chain>span>b{text-decoration:underline dotted}.au{color:#b58a00;font-weight:700}
+.tr-box{background:var(--card);border:2px solid var(--gold);border-radius:6px;padding:12px 16px;margin:10px 0}.tr-box .hd{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:760px){.cols{grid-template-columns:1fr}}
+.tr-box h3{margin:8px 0 4px;font-size:16px}.tr-box ul{margin:2px 0 2px 4px;padding-left:16px;border-left:2px solid var(--line);list-style:none}.tr-box li{margin:3px 0}
+.al{display:inline-block;border-radius:6px;padding:0 10px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap}.a1{background:#3a7bd5}.a2{background:#2f8f6a}.a3{background:#8e44ad}
+
+</style></head><body>
+<header><h1 id="ttl"></h1><nav id="nav"></nav></header>
+<main><section><input id="q" type="search"><select id="t"></select><div class="mut" id="c"></div><div class="list" id="l"></div></section><section id="d"></section></main>
+<div id="rv" hidden></div>
+<script src="items.js"></script>
+<script src="recipes.js"></script>
+<script>
+const I=window.ITEMS,EN=window.LANG==="EN",$=id=>document.getElementById(id);
+const U=EN?{ttl:"Item Guide",ph:"Search name / ID / description",all:"All types",found:"Found",type:"Type",lv:"Level",tier:"Tier",mats:"Materials",set:"Set pieces",main:"Main",sub:"Sub"}
+:{ttl:"\u0e44\u0e01\u0e14\u0e4c\u0e44\u0e2d\u0e40\u0e17\u0e21",ph:"\u0e04\u0e49\u0e19\u0e2b\u0e32\u0e0a\u0e37\u0e48\u0e2d / \u0e23\u0e2b\u0e31\u0e2a / \u0e04\u0e33\u0e2d\u0e18\u0e34\u0e1a\u0e32\u0e22",all:"\u0e17\u0e38\u0e01\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17",found:"\u0e1e\u0e1a",type:"\u0e1b\u0e23\u0e30\u0e40\u0e20\u0e17",lv:"\u0e40\u0e25\u0e40\u0e27\u0e25",tier:"\u0e21\u0e34\u0e15\u0e34\u0e40\u0e25\u0e40\u0e27\u0e25",mats:"\u0e27\u0e31\u0e2a\u0e14\u0e38\u0e42\u0e04\u0e23\u0e07\u0e2a\u0e23\u0e49\u0e32\u0e07",set:"\u0e0a\u0e34\u0e49\u0e19\u0e2a\u0e48\u0e27\u0e19\u0e43\u0e19\u0e0a\u0e38\u0e14",main:"\u0e2b\u0e25\u0e31\u0e01",sub:"\u0e23\u0e2d\u0e07"};
+$("ttl").textContent=U.ttl;$("q").placeholder=U.ph;
+const tc={};I.forEach(x=>tc[x.t]=(tc[x.t]||0)+1);
+$("t").innerHTML=`<option value="">${U.all}</option>`+Object.entries(tc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<option value="${k}">${k||"-"} (${v})</option>`).join("");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const img=x=>x.img?`<img src="${x.img}" alt="" loading="lazy">`:"";
+let cur=null;
+function list(){const q=$("q").value.trim().toLowerCase(),t=$("t").value;
+ const r=I.filter(x=>(!t||x.t===t)&&(!q||x.n.toLowerCase().includes(q)||String(x.i)===q||x.d.toLowerCase().includes(q)));
+ $("c").textContent=U.found+" "+r.length.toLocaleString();
+ $("l").innerHTML=r.slice(0,200).map(x=>`<button data-i="${x.i}" class="${cur&&cur.i===x.i?"on":""}">${img(x)}<span>${esc(x.n)}</span><small>${esc(x.t)} \u00b7 ${x.lv}</small></button>`).join("")}
+function show(id){const x=I.find(v=>v.i==id);if(!x)return;if(typeof setView==="function")setView("items");cur=x;
+ const st=Object.entries(x.st||{}).map(([k,v])=>`${k} ${v>=0?"+":""}${v}`).join(" , ");
+ const ms=(x.m||[]).map((m,i)=>`[${i?U.sub:U.main}] ${esc(m)}`).join(" &nbsp; ");
+ const set=x.set?I.filter(v=>v.set===x.set&&v.i!==x.i).map(v=>`<a data-i="${v.i}">${esc(v.n)}</a>`).join(""):"";
+ $("d").innerHTML=`<div class="card"><div class="head">${img(x)}<div><h2>${esc(x.n)}</h2><div class="mut">ID ${x.i}</div></div></div>
+ <dl><div><dt>${U.type}</dt><dd>${esc(x.t)||"-"}</dd></div><div><dt>${U.lv}</dt><dd>${x.lv}</dd></div>
+ <div><dt>${U.tier}</dt><dd>${x.tier||"-"}</dd></div>
+ ${st?`<div style="grid-column:1/-1"><dt>Stats</dt><dd>${st}</dd></div>`:""}
+ ${ms?`<div style="grid-column:1/-1"><dt>${U.mats}</dt><dd>${ms}</dd></div>`:""}</dl>
+ ${x.d?`<div class="desc">${esc(x.d)}</div>`:""}${set?`<p class="set"><b>${U.set}:</b> ${set}</p>`:""}</div>`;
+ location.hash=x.i;list()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(b)show(b.dataset.i)});
+$("q").oninput=$("t").onchange=list;list();show(+location.hash.slice(1)||I[0].i);
+
+const RC=window.RECIPES,byId={};I.forEach(x=>byId[x.i]=x);
+function setView(v){document.querySelector("main").hidden=v!=="items";$("rv").hidden=v!=="rec";document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))}
+let RS="desc",RQ="",TZ=null;const byRes={},byIng={};
+if(RC){RC.recipes.forEach(r=>{(byRes[r.r]=byRes[r.r]||[]).push(r);new Set(r.ing.map(a=>a[0])).forEach(z=>(byIng[z]=byIng[z]||[]).push(r))})}
+const MK={ok:["\u2713","ok","\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23\u0e43\u0e19\u0e40\u0e01\u0e21"],auto:["\u2248","au","\u0e08\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34\u0e08\u0e32\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e2d\u0e31\u0e07\u0e01\u0e24\u0e29+\u0e40\u0e25\u0e40\u0e27\u0e25"],tr:["\u270e","tr","\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e35\u0e48\u0e41\u0e1b\u0e25\u0e40\u0e2d\u0e07"]};
+function src(v){const x=v.id?byId[v.id]:null;return x&&x.img?x.img:(v.ic?"icons/"+v.ic+".png":"")}
+function chip(z,l,o){o=o||{};const v=RC.items[z],s=src(v),m=MK[v.m];
+ return `<span class="chip${byRes[z]?" chain":""}" ${o.nolink?"":` data-z="${esc(z)}"`}>${s?`<img src="${s}" alt="" onerror="this.style.visibility='hidden'">`:'<span class="ph"></span>'}<span><b>${esc(v.th)}</b> <span class="${m[1]}" title="${m[2]}">${m[0]}</span> <small class="mut">Lv${l}${o.tag?" \u00b7 "+o.tag:""}</small></span></span>`}
+const AL=["","\u0e27\u0e34\u0e0a\u0e32\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e02\u0e31\u0e49\u0e19\u0e15\u0e49\u0e19","\u0e27\u0e34\u0e0a\u0e32\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e02\u0e31\u0e49\u0e19\u0e01\u0e25\u0e32\u0e07","\u0e27\u0e34\u0e0a\u0e32\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e02\u0e31\u0e49\u0e19\u0e2a\u0e39\u0e07"];
+function row(r){const jump=r.lv-r.ing[0][1],al=r.al||3,parts=r.ing.map((a,i)=>chip(a[0],a[1],{tag:i?"":"\u0e2b\u0e25\u0e31\u0e01"}));
+ if(r.book)parts.push(chip("\u66f8"+r.book,r.book,{tag:"\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21",nolink:1}));
+ return `<tr><td><span class="al a${al}">${AL[al]}</span></td><td class="jp">+${jump}</td><td>${chip(r.r,r.lv)}</td><td><div class="rcp">${parts.join('<span class="pl">+</span>')}</div></td></tr>`}
+function down(z,seen,d){const rs=byRes[z];if(!rs||d>7||seen.has(z))return"";const r=rs[0],s2=new Set(seen).add(z);
+ return `<ul>${r.ing.map((a,i)=>`<li>${chip(a[0],a[1],{tag:i?"\u0e23\u0e2d\u0e07":"\u0e2b\u0e25\u0e31\u0e01"})}${down(a[0],s2,d+1)}</li>`).join("")}<li class="mut">${r.book?"\u0e43\u0e0a\u0e49\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21\u0e40\u0e25\u0e48\u0e21 "+r.book:"\u0e44\u0e21\u0e48\u0e43\u0e0a\u0e49\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21"}${rs.length>1?` \u00b7 \u0e21\u0e35\u0e2a\u0e39\u0e15\u0e23\u0e17\u0e32\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e35\u0e01 ${rs.length-1} \u0e41\u0e1a\u0e1a`:""}</li></ul>`}
+function up(z,seen,d){const rs=byIng[z];if(!rs||d>2)return"";const out=[];
+ rs.forEach(r=>{if(seen.has(r.r))return;out.push(`<li>\u2192 ${chip(r.r,r.lv)} <small class="mut">(${r.book?"\u0e40\u0e25\u0e48\u0e21 "+r.book:"-"})</small>${up(r.r,new Set(seen).add(r.r),d+1)}</li>`)});
+ return out.length?`<ul>${out.slice(0,14).join("")}</ul>`:""}
+function trace(z){const v=RC.items[z],has=byRes[z],use=byIng[z];
+ return `<div class="tr-box"><div class="hd"><b>\u0e44\u0e25\u0e48\u0e2a\u0e39\u0e15\u0e23:</b> ${chip(z,v.lv)} <button data-x="1">\u0e1b\u0e34\u0e14</button>${v.id?`<button data-card="${v.id}">\u0e14\u0e39\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e44\u0e2d\u0e40\u0e17\u0e21</button>`:""}</div>
+ <div class="cols"><div><h3>\u2193 \u0e44\u0e25\u0e48\u0e25\u0e07: \u0e27\u0e34\u0e18\u0e35\u0e17\u0e33 \u0e08\u0e32\u0e01\u0e40\u0e25\u0e40\u0e27\u0e25\u0e2a\u0e39\u0e07\u0e44\u0e1b\u0e15\u0e48\u0e33</h3>${has?down(z,new Set(),0):'<p class="mut">\u0e44\u0e21\u0e48\u0e21\u0e35\u0e2a\u0e39\u0e15\u0e23\u0e43\u0e19\u0e04\u0e39\u0e48\u0e21\u0e37\u0e2d (\u0e19\u0e48\u0e32\u0e08\u0e30\u0e44\u0e14\u0e49\u0e08\u0e32\u0e01\u0e14\u0e23\u0e2d\u0e1b/\u0e14\u0e31\u0e19\u0e40\u0e08\u0e35\u0e49\u0e22\u0e19)</p>'}</div>
+ <div><h3>\u2191 \u0e44\u0e25\u0e48\u0e02\u0e36\u0e49\u0e19: \u0e43\u0e0a\u0e49\u0e17\u0e33\u0e2d\u0e30\u0e44\u0e23\u0e15\u0e48\u0e2d \u0e08\u0e32\u0e01\u0e15\u0e48\u0e33\u0e44\u0e1b\u0e2a\u0e39\u0e07</h3>${use?up(z,new Set([z]),0):'<p class="mut">\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e43\u0e0a\u0e49\u0e43\u0e19\u0e2a\u0e39\u0e15\u0e23\u0e2d\u0e37\u0e48\u0e19</p>'}</div></div></div>`}
+function renderRec(){const q=RQ.toLowerCase(),nm=z=>(RC.items[z].th+z).toLowerCase();
+ const L=RC.recipes.filter(r=>!q||nm(r.r).includes(q)||r.ing.some(a=>nm(a[0]).includes(q)));
+ L.sort((a,b)=>(RS==="desc"?b.lv-a.lv:a.lv-b.lv)||a.r.localeCompare(b.r));
+ $("rv").innerHTML=`<div class="rw"><p class="mut"><b>\u0e2a\u0e39\u0e15\u0e23\u0e08\u0e32\u0e01\u0e04\u0e39\u0e48\u0e21\u0e37\u0e2d\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e44\u0e15\u0e49\u0e2b\u0e27\u0e31\u0e19</b> \u0e22\u0e31\u0e07\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49\u0e17\u0e14\u0e2a\u0e2d\u0e1a\u0e04\u0e23\u0e1a\u0e01\u0e31\u0e1a\u0e40\u0e0b\u0e34\u0e23\u0e4c\u0e1f\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e44\u0e17\u0e22 \u00b7 <span class="ok">\u2713</span> \u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23 <span class="au">\u2248</span> \u0e08\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34\u0e08\u0e32\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e2d\u0e31\u0e07\u0e01\u0e24\u0e29+\u0e40\u0e25\u0e40\u0e27\u0e25 (\u0e04\u0e27\u0e23\u0e40\u0e0a\u0e47\u0e01) <span class="tr">\u270e</span> \u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e35\u0e48\u0e41\u0e1b\u0e25\u0e40\u0e2d\u0e07 \u00b7 "\u0e2b\u0e25\u0e31\u0e01" = \u0e27\u0e31\u0e15\u0e16\u0e38\u0e14\u0e34\u0e1a\u0e0a\u0e48\u0e2d\u0e07\u0e41\u0e23\u0e01 \u00b7 \u0e2a\u0e39\u0e15\u0e23\u0e43\u0e19\u0e04\u0e39\u0e48\u0e21\u0e37\u0e2d\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14\u0e43\u0e0a\u0e49\u0e27\u0e34\u0e0a\u0e32\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e02\u0e31\u0e49\u0e19\u0e2a\u0e39\u0e07 \u00b7 \u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e43\u0e2a\u0e48\u0e44\u0e14\u0e49 1 \u0e40\u0e25\u0e48\u0e21\u0e15\u0e48\u0e2d\u0e01\u0e32\u0e23\u0e23\u0e27\u0e21 \u00b7 \u0e01\u0e14\u0e44\u0e2d\u0e40\u0e17\u0e21\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e44\u0e25\u0e48\u0e2a\u0e39\u0e15\u0e23</p>
+ <div class="ctl"><input id="rq" type="search" placeholder="\u0e04\u0e49\u0e19\u0e2b\u0e32\u0e0a\u0e37\u0e48\u0e2d\u0e44\u0e2d\u0e40\u0e17\u0e21\u0e43\u0e19\u0e2a\u0e39\u0e15\u0e23" value="${esc(RQ)}"><button data-s="desc" class="${RS==="desc"?"on":""}">\u0e40\u0e25\u0e40\u0e27\u0e25\u0e2a\u0e39\u0e07 \u2192 \u0e15\u0e48\u0e33</button><button data-s="asc" class="${RS==="asc"?"on":""}">\u0e40\u0e25\u0e40\u0e27\u0e25\u0e15\u0e48\u0e33 \u2192 \u0e2a\u0e39\u0e07</button><span class="mut">${L.length} \u0e2a\u0e39\u0e15\u0e23</span></div><div id="trace">${TZ?trace(TZ):""}</div>
+ <div class="wrap"><table><thead><tr><th>\u0e23\u0e30\u0e14\u0e31\u0e1a\u0e01\u0e32\u0e23\u0e40\u0e25\u0e48\u0e19\u0e41\u0e23\u0e48\u0e41\u0e1b\u0e23\u0e18\u0e32\u0e15\u0e38</th><th>\u0e40\u0e1e\u0e34\u0e48\u0e21 Lv</th><th>\u0e1c\u0e25\u0e25\u0e31\u0e1e\u0e18\u0e4c</th><th>\u0e2a\u0e39\u0e15\u0e23</th></tr></thead><tbody>${L.map(row).join("")}</tbody></table></div></div>`;
+ const q2=$("rq");if(q2&&RQ){q2.focus();q2.setSelectionRange(RQ.length,RQ.length)}}
+$("rv").addEventListener("click",e=>{const t=e.target;
+ const s=t.closest("[data-s]");if(s){RS=s.dataset.s;renderRec();return}
+ if(t.closest("[data-x]")){TZ=null;renderRec();return}
+ const c=t.closest("[data-card]");if(c){show(c.dataset.card);return}
+ const z=t.closest("[data-z]");if(z){TZ=z.dataset.z;renderRec();const tb=$("trace");if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:"nearest"})}});
+$("rv").addEventListener("input",e=>{if(e.target.id==="rq"){RQ=e.target.value;renderRec()}});
+if(RC){$("nav").innerHTML='<button data-v="items">\u0e44\u0e2d\u0e40\u0e17\u0e21</button><button data-v="rec">\u0e2a\u0e39\u0e15\u0e23\u0e2b\u0e25\u0e2d\u0e21</button>';$("nav").onclick=e=>{const b=e.target.closest("button");if(b)setView(b.dataset.v)};renderRec();setView("items")}
+</script></body></html>
