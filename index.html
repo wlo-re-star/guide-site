@@ -31,9 +31,10 @@ h2{margin:0;font-size:24px}.mut{color:var(--mut);font-size:14px}dl{display:grid;
 </style></head><body>
 <header><h1 id="ttl"></h1><nav id="nav"></nav></header>
 <main><section><input id="q" type="search"><select id="t"></select><div class="mut" id="c"></div><div class="list" id="l"></div></section><section id="d"></section></main>
-<div id="rv" hidden></div>
+<div id="rv" hidden></div><div id="sv" hidden></div>
 <script src="items.js"></script>
 <script src="recipes.js"></script>
+<script src="star.js"></script>
 <script>
 const I=window.ITEMS,EN=window.LANG==="EN",$=id=>document.getElementById(id);
 const U=EN?{ttl:"Item Guide",ph:"Search name / ID / description",all:"All types",found:"Found",type:"Type",lv:"Level",tier:"Tier",mats:"Materials",set:"Set pieces",main:"Main",sub:"Sub"}
@@ -45,14 +46,14 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 const img=x=>x.img?`<img src="${x.img}" alt="" loading="lazy">`:"";
 let cur=null;
 function list(){const q=$("q").value.trim().toLowerCase(),t=$("t").value;
- const r=I.filter(x=>(!t||x.t===t)&&(!q||x.n.toLowerCase().includes(q)||String(x.i)===q||x.d.toLowerCase().includes(q)));
+ const r=I.filter(x=>(!t||x.t===t)&&(!q||x.n.toLowerCase().includes(q)||(x.o||"").toLowerCase().includes(q)||String(x.i)===q||x.d.toLowerCase().includes(q)));
  $("c").textContent=U.found+" "+r.length.toLocaleString();
- $("l").innerHTML=r.slice(0,200).map(x=>`<button data-i="${x.i}" class="${cur&&cur.i===x.i?"on":""}">${img(x)}<span>${esc(x.n)}</span><small>${esc(x.t)} \u00b7 ${x.lv}</small></button>`).join("")}
+ $("l").innerHTML=r.slice(0,200).map(x=>`<button data-i="${x.i}" class="${cur&&cur.i===x.i?"on":""}">${img(x)}<span>${esc(x.n)}${x.o?' <small class="tr">\u270e</small>':""}</span><small>${esc(x.t)} \u00b7 ${x.lv}</small></button>`).join("")}
 function show(id){const x=I.find(v=>v.i==id);if(!x)return;if(typeof setView==="function")setView("items");cur=x;
  const st=Object.entries(x.st||{}).map(([k,v])=>`${k} ${v>=0?"+":""}${v}`).join(" , ");
  const ms=(x.m||[]).map((m,i)=>`[${i?U.sub:U.main}] ${esc(m)}`).join(" &nbsp; ");
  const set=x.set?I.filter(v=>v.set===x.set&&v.i!==x.i).map(v=>`<a data-i="${v.i}">${esc(v.n)}</a>`).join(""):"";
- $("d").innerHTML=`<div class="card"><div class="head">${img(x)}<div><h2>${esc(x.n)}</h2><div class="mut">ID ${x.i}</div></div></div>
+ $("d").innerHTML=`<div class="card"><div class="head">${img(x)}<div><h2>${esc(x.n)}</h2><div class="mut">ID ${x.i}${x.o?" \u00b7 \u0e0a\u0e37\u0e48\u0e2d\u0e40\u0e14\u0e34\u0e21\u0e43\u0e19\u0e40\u0e01\u0e21: "+esc(x.o)+" (\u0e41\u0e1b\u0e25\u0e42\u0e14\u0e22\u0e1c\u0e39\u0e49\u0e08\u0e31\u0e14\u0e17\u0e33)":""}</div></div></div>
  <dl><div><dt>${U.type}</dt><dd>${esc(x.t)||"-"}</dd></div><div><dt>${U.lv}</dt><dd>${x.lv}</dd></div>
  <div><dt>${U.tier}</dt><dd>${x.tier||"-"}</dd></div>
  ${st?`<div style="grid-column:1/-1"><dt>Stats</dt><dd>${st}</dd></div>`:""}
@@ -63,7 +64,7 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-i]");if(b)
 $("q").oninput=$("t").onchange=list;list();show(+location.hash.slice(1)||I[0].i);
 
 const RC=window.RECIPES,byId={};I.forEach(x=>byId[x.i]=x);
-function setView(v){document.querySelector("main").hidden=v!=="items";$("rv").hidden=v!=="rec";document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))}
+function setView(v){document.querySelector("main").hidden=v!=="items";$("rv").hidden=v!=="rec";$("sv").hidden=v!=="star";document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))}
 let RS="desc",RQ="",TZ=null;const byRes={},byIng={};
 if(RC){RC.recipes.forEach(r=>{(byRes[r.r]=byRes[r.r]||[]).push(r);new Set(r.ing.map(a=>a[0])).forEach(z=>(byIng[z]=byIng[z]||[]).push(r))})}
 const MK={ok:["\u2713","ok","\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e32\u0e07\u0e01\u0e32\u0e23\u0e43\u0e19\u0e40\u0e01\u0e21"],auto:["\u2248","au","\u0e08\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e2d\u0e31\u0e15\u0e42\u0e19\u0e21\u0e31\u0e15\u0e34\u0e08\u0e32\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e2d\u0e31\u0e07\u0e01\u0e24\u0e29+\u0e40\u0e25\u0e40\u0e27\u0e25"],tr:["\u270e","tr","\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e35\u0e48\u0e41\u0e1b\u0e25\u0e40\u0e2d\u0e07"]};
@@ -75,9 +76,9 @@ function row(r){const jump=r.lv-r.ing[0][1],al=r.al||3,parts=r.ing.map((a,i)=>ch
  if(r.book)parts.push(chip("\u66f8"+r.book,r.book,{tag:"\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21",nolink:1}));
  return `<tr><td><span class="al a${al}">${AL[al]}</span></td><td class="jp">+${jump}</td><td>${chip(r.r,r.lv)}</td><td><div class="rcp">${parts.join('<span class="pl">+</span>')}</div></td></tr>`}
 function down(z,seen,d){const rs=byRes[z];if(!rs||d>7||seen.has(z))return"";const r=rs[0],s2=new Set(seen).add(z);
- return `<ul>${r.ing.map((a,i)=>`<li>${chip(a[0],a[1],{tag:i?"\u0e23\u0e2d\u0e07":"\u0e2b\u0e25\u0e31\u0e01"})}${down(a[0],s2,d+1)}</li>`).join("")}<li class="mut">${r.book?"\u0e43\u0e0a\u0e49\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21\u0e40\u0e25\u0e48\u0e21 "+r.book:"\u0e44\u0e21\u0e48\u0e43\u0e0a\u0e49\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21"}${rs.length>1?` \u00b7 \u0e21\u0e35\u0e2a\u0e39\u0e15\u0e23\u0e17\u0e32\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e35\u0e01 ${rs.length-1} \u0e41\u0e1a\u0e1a`:""}</li></ul>`}
+ return `<ul>${r.ing.map((a,i)=>`<li>${chip(a[0],a[1],{tag:i?"\u0e23\u0e2d\u0e07":"\u0e2b\u0e25\u0e31\u0e01"})}${down(a[0],s2,d+1)}</li>`).join("")}<li>${r.book?chip("\u66f8"+r.book,r.book,{tag:"\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21",nolink:1}):'<span class="mut">\u0e44\u0e21\u0e48\u0e43\u0e0a\u0e49\u0e2a\u0e32\u0e23\u0e32\u0e19\u0e38\u0e01\u0e23\u0e21</span>'}${rs.length>1?` <small class="mut">\u00b7 \u0e21\u0e35\u0e2a\u0e39\u0e15\u0e23\u0e17\u0e32\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2d\u0e35\u0e01 ${rs.length-1} \u0e41\u0e1a\u0e1a</small>`:""}</li></ul>`}
 function up(z,seen,d){const rs=byIng[z];if(!rs||d>2)return"";const out=[];
- rs.forEach(r=>{if(seen.has(r.r))return;out.push(`<li>\u2192 ${chip(r.r,r.lv)} <small class="mut">(${r.book?"\u0e40\u0e25\u0e48\u0e21 "+r.book:"-"})</small>${up(r.r,new Set(seen).add(r.r),d+1)}</li>`)});
+ rs.forEach(r=>{if(seen.has(r.r))return;out.push(`<li>\u2192 ${chip(r.r,r.lv)} ${r.book?` <span class="pl">+</span> ${chip("\u66f8"+r.book,r.book,{nolink:1})}`:""}${up(r.r,new Set(seen).add(r.r),d+1)}</li>`)});
  return out.length?`<ul>${out.slice(0,14).join("")}</ul>`:""}
 function trace(z){const v=RC.items[z],has=byRes[z],use=byIng[z];
  return `<div class="tr-box"><div class="hd"><b>\u0e44\u0e25\u0e48\u0e2a\u0e39\u0e15\u0e23:</b> ${chip(z,v.lv)} <button data-x="1">\u0e1b\u0e34\u0e14</button>${v.id?`<button data-card="${v.id}">\u0e14\u0e39\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e44\u0e2d\u0e40\u0e17\u0e21</button>`:""}</div>
@@ -97,4 +98,19 @@ $("rv").addEventListener("click",e=>{const t=e.target;
  const z=t.closest("[data-z]");if(z){TZ=z.dataset.z;renderRec();const tb=$("trace");if(tb&&tb.scrollIntoView)tb.scrollIntoView({block:"nearest"})}});
 $("rv").addEventListener("input",e=>{if(e.target.id==="rq"){RQ=e.target.value;renderRec()}});
 if(RC){$("nav").innerHTML='<button data-v="items">\u0e44\u0e2d\u0e40\u0e17\u0e21</button><button data-v="rec">\u0e2a\u0e39\u0e15\u0e23\u0e2b\u0e25\u0e2d\u0e21</button>';$("nav").onclick=e=>{const b=e.target.closest("button");if(b)setView(b.dataset.v)};renderRec();setView("items")}
+
+const ST=window.STAR;let SS="asc",ZH=false;
+function renderStar(){const rows=[...ST.rows].sort((a,b)=>(SS==="asc"?a.lv-b.lv:b.lv-a.lv)||a.tier-b.tier);
+ const f=ST.rows.filter(r=>r.id).length;
+ $("sv").innerHTML=`<div class="rw"><p class="mut"><b>\u0e15\u0e32\u0e23\u0e32\u0e07\u0e44\u0e2d\u0e40\u0e17\u0e21\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e22\u0e14\u0e32\u0e27</b> (\u0e40\u0e09\u0e1e\u0e32\u0e30\u0e44\u0e2d\u0e40\u0e17\u0e21\u0e17\u0e35\u0e48\u0e27\u0e31\u0e2a\u0e14\u0e38\u0e2b\u0e25\u0e31\u0e01\u0e40\u0e1b\u0e47\u0e19\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e22\u0e14\u0e32\u0e27) \u0e08\u0e32\u0e01\u0e15\u0e32\u0e23\u0e32\u0e07\u0e1c\u0e39\u0e49\u0e40\u0e25\u0e48\u0e19\u0e44\u0e15\u0e49\u0e2b\u0e27\u0e31\u0e19 \u0e40\u0e17\u0e35\u0e22\u0e1a\u0e01\u0e31\u0e1a\u0e44\u0e1f\u0e25\u0e4c\u0e40\u0e01\u0e21\u0e41\u0e25\u0e49\u0e27 ${f}/${ST.rows.length} \u0e41\u0e16\u0e27 (\u0e04\u0e48\u0e32\u0e2a\u0e16\u0e32\u0e19\u0e30\u0e41\u0e25\u0e30\u0e27\u0e31\u0e2a\u0e14\u0e38\u0e15\u0e23\u0e07\u0e01\u0e31\u0e1a\u0e44\u0e1f\u0e25\u0e4c) \u00b7 \u0e41\u0e16\u0e27\u0e17\u0e35\u0e48\u0e44\u0e21\u0e48\u0e21\u0e35\u0e23\u0e2b\u0e31\u0e2a\u0e22\u0e31\u0e07\u0e08\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49 \u00b7 \u0e01\u0e14\u0e0a\u0e37\u0e48\u0e2d\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e14\u0e39\u0e01\u0e32\u0e23\u0e4c\u0e14\u0e44\u0e2d\u0e40\u0e17\u0e21</p>
+ <div class="ctl"><button data-ss="asc" class="${SS==="asc"?"on":""}">\u0e40\u0e25\u0e40\u0e27\u0e25\u0e15\u0e48\u0e33 \u2192 \u0e2a\u0e39\u0e07</button><button data-ss="desc" class="${SS==="desc"?"on":""}">\u0e40\u0e25\u0e40\u0e27\u0e25\u0e2a\u0e39\u0e07 \u2192 \u0e15\u0e48\u0e33</button><span class="mut">${rows.length} \u0e23\u0e32\u0e22\u0e01\u0e32\u0e23</span></div>
+ <div class="wrap"><table><thead><tr><th>\u0e21\u0e34\u0e15\u0e34\u0e40\u0e25\u0e40\u0e27\u0e25</th><th>\u0e44\u0e2d\u0e40\u0e17\u0e21</th><th>\u0e40\u0e25\u0e40\u0e27\u0e25</th><th>\u0e04\u0e48\u0e32\u0e2a\u0e16\u0e32\u0e19\u0e30</th><th>\u0e27\u0e31\u0e2a\u0e14\u0e38</th></tr></thead><tbody>${rows.map(r=>{const x=r.id?byId[r.id]:null,im=x&&x.img?`<img src="${x.img}" alt="">`:'<span class="ph"></span>';
+ const tier=x&&x.tier&&x.tier!==r.tier?`${r.tier} <small class="mut">(\u0e44\u0e1f\u0e25\u0e4c ${x.tier})</small>`:r.tier;
+ const nm=x?`<span class="chip" data-i="${x.i}">${im}<span><b>${esc(x.n)}</b><br><small class="mut">${ZH?esc(r.zh):""}</small></span></span>`:`<span class="chip">${im}<span><b>${esc(r.th||r.zh)}</b> <span class="tr" title="\u0e0a\u0e37\u0e48\u0e2d\u0e17\u0e35\u0e48\u0e41\u0e1b\u0e25\u0e40\u0e2d\u0e07">\u270e</span><br><small class="mut">\u0e22\u0e31\u0e07\u0e08\u0e31\u0e1a\u0e04\u0e39\u0e48\u0e01\u0e31\u0e1a\u0e44\u0e2d\u0e40\u0e17\u0e21\u0e43\u0e19\u0e40\u0e01\u0e21\u0e44\u0e21\u0e48\u0e44\u0e14\u0e49${ZH?" \u00b7 "+esc(r.zh):""}</small></span></span>`;
+ const ent=x&&x.st&&Object.keys(x.st).length?Object.entries(x.st).slice(0,Object.keys(r.st).length):Object.entries(r.st);const stt=ent.map(([k,v])=>`${k} ${v>=0?"+":""}${v}`).join(" \u00b7 ")+(r.rnd?' <small class="mut">+\u0e04\u0e27\u0e32\u0e21\u0e2a\u0e32\u0e21\u0e32\u0e23\u0e16\u0e2a\u0e38\u0e48\u0e21</small>':"");
+ const mt=x?(x.m||[]).map((m,i)=>`[${i?"\u0e23\u0e2d\u0e07":"\u0e2b\u0e25\u0e31\u0e01"}] ${esc(m)}`).join(" \u00b7 "):esc(r.mths||r.mats);
+ return `<tr><td class="jp">${tier}</td><td>${nm}</td><td>${r.lv}</td><td>${stt}</td><td>${mt}</td></tr>`}).join("")}</tbody></table></div></div>`}
+$("sv").addEventListener("click",e=>{const b=e.target.closest("[data-ss]");if(b){SS=b.dataset.ss;renderStar();return}if(e.target.closest("[data-zh]")){ZH=!ZH;renderStar()}});
+const NB=[];if(RC)NB.push('<button data-v="rec">\u0e2a\u0e39\u0e15\u0e23\u0e2b\u0e25\u0e2d\u0e21</button>');if(ST)NB.push('<button data-v="star">\u0e15\u0e32\u0e23\u0e32\u0e07\u0e1b\u0e23\u0e30\u0e01\u0e32\u0e22\u0e14\u0e32\u0e27</button>');
+if(ST){$("nav").innerHTML='<button data-v="items">\u0e44\u0e2d\u0e40\u0e17\u0e21</button>'+NB.join("");$("nav").onclick=e=>{const b=e.target.closest("button");if(b)setView(b.dataset.v)};renderStar();if(RC)renderRec();setView("items")}
 </script></body></html>
